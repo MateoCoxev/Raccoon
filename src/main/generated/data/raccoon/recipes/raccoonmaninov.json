@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "item": "minecraft:gray_wool"
+    },
+    "R": {
+      "item": "minecraft:red_wool"
+    }
+  },
+  "pattern": [
+    "GGG",
+    "RGR",
+    "GGG"
+  ],
+  "result": {
+    "item": "raccoon:raccoonmaninov"
+  },
+  "show_notification": true
+}

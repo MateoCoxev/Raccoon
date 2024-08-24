@@ -1,0 +1,46 @@
+{
+  "parent": "minecraft:raccoon/raccoon_tamed",
+  "criteria": {
+    "raccoon_wearing_hat_and_glasses": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "raccoon:raccoon"
+            }
+          }
+        ],
+        "item": {
+          "items": [
+            "raccoon:hat_and_glasses"
+          ]
+        }
+      },
+      "trigger": "minecraft:player_interacted_with_entity"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "description": {
+      "translate": "advancements.raccoon_wearing_hat_and_glasses.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "raccoon:hat_and_glasses"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.raccoon_wearing_hat_and_glasses.title"
+    }
+  },
+  "requirements": [
+    [
+      "raccoon_wearing_hat_and_glasses"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,27 @@
+{
+  "item.raccoon.raccoon_spawn_egg": "Oeuf d'apparition de raton-laveur",
+
+  "item.raccoon.hat": "Chapeau",
+  "item.raccoon.glasses": "Lunettes",
+  "item.raccoon.hat_and_glasses": "Chapeau et lunettes",
+
+  "block.raccoon.raccoonmaninov": "Raccoonmaninov",
+  "block.raccoon.mr_oizo": "Mr. Oizo",
+
+  "entity.raccoon.raccoon": "Raton-laveur",
+
+  "itemgroup.raccoon": "Raton-laveur",
+
+  "advancements.raccoon.title": "PEDRO!",
+  "advancements.raccoon.description": "Apprivoisez votre premier raton-laveur.",
+  "advancements.got_raccoonmaninov.title": "Remembrance",
+  "advancements.got_raccoonmaninov.description": "Fabriquez Raccoonmaninov, une peluche d'anciennes amitiés.",
+  "advancements.got_mroizo.title": "Ne vous approchez pas d'un pneu...",
+  "advancements.got_mroizo.description": "Fabriquez MrOizo.",
+  "advancements.raccoon_wearing_hat_and_glasses.title": "Coquette!",
+  "advancements.raccoon_wearing_hat_and_glasses.description": "Faîtes porter un chapeau et des lunettes à un raton-laveur.",
+  "advancements.chonky_raccoon_tamed.title": "BOUDIOU",
+  "advancements.chonky_raccoon_tamed.description": "Apprivoisez un gros raton-laveur.",
+  "advancements.chonked.title": "Embonpoint",
+  "advancements.chonked.description": "Oops, je l'ai trop nourri..."
+}

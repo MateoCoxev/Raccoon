@@ -1,0 +1,29 @@
+{
+  "raccoon_idle": {
+    "category": "neutral",
+    "sounds": [
+      {
+      "name": "raccoon:raccoon_idle_0"
+      },
+      {
+      "name": "raccoon:raccoon_idle_1"
+      },
+      {
+      "name": "raccoon:raccoon_idle_2"
+      }
+    ],
+    "subtitle": "raccoon.sound.subtitle.raccoon_idle"
+  },
+  "raccoon_hurt": {
+    "category": "neutral",
+    "sounds": [
+      {
+      "name": "raccoon:raccoon_hurt_0"
+      },
+      {
+      "name": "raccoon:raccoon_hurt_1"
+      }
+    ],
+    "subtitle": "raccoon.sound.subtitle.raccoon_hurt"
+  }
+}

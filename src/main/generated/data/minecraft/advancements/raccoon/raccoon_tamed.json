@@ -1,0 +1,40 @@
+{
+  "criteria": {
+    "raccoon_tamed": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "raccoon:raccoon"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:tame_animal"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "description": {
+      "translate": "advancements.raccoon.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "raccoon:raccoonmaninov"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.raccoon.title"
+    }
+  },
+  "requirements": [
+    [
+      "raccoon_tamed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,27 @@
+{
+  "item.raccoon.raccoon_spawn_egg": "Raccoon Spawn Egg",
+
+  "item.raccoon.hat": "Hat",
+  "item.raccoon.glasses": "Glasses",
+  "item.raccoon.hat_and_glasses": "Hat and Glasses",
+
+  "block.raccoon.raccoonmaninov": "Raccoonmaninov",
+  "block.raccoon.mr_oizo": "Mr. Oizo",
+
+  "entity.raccoon.raccoon": "Raccoon",
+
+  "itemgroup.raccoon": "Raccoon",
+
+  "advancements.raccoon.title": "PEDRO!",
+  "advancements.raccoon.description": "Tame your first raccoon.",
+  "advancements.got_raccoonmaninov.title": "Remembrance",
+  "advancements.got_raccoonmaninov.description": "Craft Raccoonmaninov, a plush from past friendships.",
+  "advancements.got_mroizo.title": "Don't get too close to a tire...",
+  "advancements.got_mroizo.description": "Craft MrOizo.",
+  "advancements.raccoon_wearing_hat_and_glasses.title": "Coquette!",
+  "advancements.raccoon_wearing_hat_and_glasses.description": "Make a raccoon wear hat and glasses.",
+  "advancements.chonky_raccoon_tamed.title": "OH LAWD",
+  "advancements.chonky_raccoon_tamed.description": "Tame a chonky raccoon.",
+  "advancements.chonked.title": "Chonked",
+  "advancements.chonked.description": "Oops, I fed it too much..."
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "raccoon:block/raccoonmaninov",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "raccoon:block/raccoonmaninov"
+    },
+    "facing=south": {
+      "model": "raccoon:block/raccoonmaninov",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "raccoon:block/raccoonmaninov",
+      "y": 270
+    }
+  }
+}

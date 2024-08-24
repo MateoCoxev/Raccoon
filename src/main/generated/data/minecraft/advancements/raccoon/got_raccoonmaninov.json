@@ -1,0 +1,39 @@
+{
+  "parent": "minecraft:raccoon/raccoon_tamed",
+  "criteria": {
+    "got_raccoonmaninov": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "raccoon:raccoonmaninov"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "description": {
+      "translate": "advancements.got_raccoonmaninov.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "raccoon:raccoonmaninov"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.got_raccoonmaninov.title"
+    }
+  },
+  "requirements": [
+    [
+      "got_raccoonmaninov"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

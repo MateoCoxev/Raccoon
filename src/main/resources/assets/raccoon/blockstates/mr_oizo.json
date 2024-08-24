@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "raccoon:block/mr_oizo",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "raccoon:block/mr_oizo"
+    },
+    "facing=south": {
+      "model": "raccoon:block/mr_oizo",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "raccoon:block/mr_oizo",
+      "y": 270
+    }
+  }
+}

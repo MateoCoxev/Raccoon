@@ -1,0 +1,31 @@
+{
+  "parent": "minecraft:raccoon/raccoon_tamed",
+  "criteria": {
+    "chonked": {
+      "conditions": {},
+      "trigger": "minecraft:raccoon/chonked"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "description": {
+      "translate": "advancements.chonked.description"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "item": "minecraft:cake"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.chonked.title"
+    }
+  },
+  "requirements": [
+    [
+      "chonked"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,42 @@
+{
+  "parent": "minecraft:raccoon/raccoon_tamed",
+  "criteria": {
+    "chonky_raccoon_tamed": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "raccoon:raccoon",
+              "nbt": "{Chonky:1b}"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:tame_animal"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+    "description": {
+      "translate": "advancements.chonky_raccoon_tamed.description"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "item": "raccoon:raccoon_spawn_egg"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.chonky_raccoon_tamed.title"
+    }
+  },
+  "requirements": [
+    [
+      "chonky_raccoon_tamed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

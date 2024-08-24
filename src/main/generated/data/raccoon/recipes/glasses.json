@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "item": "minecraft:black_stained_glass_pane"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "GSG"
+  ],
+  "result": {
+    "item": "raccoon:glasses"
+  },
+  "show_notification": true
+}

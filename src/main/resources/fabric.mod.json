@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "raccoon",
+	"version": "${version}",
+	"name": "Raccoon",
+	"description": "Raccoon hehe",
+	"authors": [
+		"Coxev"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/raccoon/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.coxev.raccoon.Raccoon"
+		],
+		"client": [
+			"net.coxev.raccoon.RaccoonClient"
+		],
+		"fabric-datagen": [
+			"net.coxev.raccoon.RaccoonDataGenerator"
+		]
+	},
+	"mixins": [
+		"raccoon.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}

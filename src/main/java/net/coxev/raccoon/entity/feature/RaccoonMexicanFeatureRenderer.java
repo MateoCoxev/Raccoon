@@ -1,8 +1,6 @@
 package net.coxev.raccoon.entity.feature;
 
-import net.coxev.raccoon.Raccoon;
 import net.coxev.raccoon.entity.client.AbstractRaccoonModel;
-import net.coxev.raccoon.entity.client.RaccoonModel;
 import net.coxev.raccoon.entity.custom.RaccoonEntity;
 import net.coxev.raccoon.item.ModItems;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -13,8 +11,6 @@ import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 
 public class RaccoonMexicanFeatureRenderer extends FeatureRenderer<RaccoonEntity, AbstractRaccoonModel<RaccoonEntity>> {
@@ -27,7 +23,6 @@ public class RaccoonMexicanFeatureRenderer extends FeatureRenderer<RaccoonEntity
 
     @Override
     public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int light, RaccoonEntity entity, float limbAngle, float limbDistance, float age, float tickDelta, float headYaw, float headPitch) {
-        float m;
         if(entity.getEquippedStack(EquipmentSlot.HEAD).isOf(ModItems.HAT_AND_GLASSES)){
             ItemStack heldItem = ModItems.HAT_AND_GLASSES.getDefaultStack();
             matrixStack.push();
@@ -45,8 +40,9 @@ public class RaccoonMexicanFeatureRenderer extends FeatureRenderer<RaccoonEntity
             matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(this.getContextModel().head.getTransform().yaw * 180.0f / (float) Math.PI));
             matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(this.getContextModel().head.getTransform().pitch * 180.0f / (float) Math.PI));
 
-            matrixStack.translate(0f, -0.05f, -0.16f);
+            matrixStack.translate(0f, -0.03f, -0.20f);
             matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180.0f));
+            matrixStack.scale(1.2f, 1.2f, 1.2f);
             this.heldItemRenderer.renderItem(entity, heldItem, ModelTransformationMode.GROUND, false, matrixStack, vertexConsumerProvider, light);
             matrixStack.pop();
         }

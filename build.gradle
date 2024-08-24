@@ -28,11 +28,6 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-	modImplementation "curse.maven:trash-cans-394535:4606911"
-	modImplementation "curse.maven:supermartijn642s-config-lib-438332:4785838"
-	modImplementation "curse.maven:supermartijn642s-core-lib-454372:5102287"
-	include modApi('teamreborn:energy:3.0.0')
 }
 
 processResources {

@@ -1,32 +1,14 @@
 package net.coxev.raccoon.entity.ai;
 
-import com.supermartijn642.trashcans.TrashCans;
-import net.coxev.raccoon.block.ModBlocks;
 import net.coxev.raccoon.entity.custom.RaccoonEntity;
 import net.coxev.raccoon.util.ModTags;
-import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.data.client.BlockStateSupplier;
-import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.pathing.Path;
-import net.minecraft.entity.mob.PhantomEntity;
-import net.minecraft.entity.passive.FoxEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.particle.ItemStackParticleEffect;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -36,14 +18,12 @@ import java.util.Random;
 public class RaccoonStealGoal extends Goal {
     private final RaccoonEntity raccoon;
     private final double escapeSpeed;
-    private Path path;
     private double initialX;
     private double initialY;
     private double initialZ;
 
     public BlockPos getClosestTrashBin(int distance){
         BlockPos closestPos = null;
-        BlockPos checkPos = raccoon.getBlockPos();
         int raccoonX = MathHelper.floor(this.raccoon.getX());
         int raccoonY = MathHelper.floor(this.raccoon.getY());
         int raccoonZ = MathHelper.floor(this.raccoon.getZ());
@@ -51,9 +31,8 @@ public class RaccoonStealGoal extends Goal {
         for (int x = raccoonX - distance; x < raccoonX + distance; x++) {
             for (int y = raccoonY - distance; y < raccoonY + distance; y++) {
                 for (int z = raccoonZ - distance; z < raccoonZ + distance; z++) {
-                    checkPos = new BlockPos(x, y, z);
-                    if (this.raccoon.getWorld().getBlockState(checkPos).isIn(ModTags.Blocks.TRASH_CANS)) {
-                        // check if it is closer than any previously found position
+                    BlockPos checkPos = new BlockPos(x, y, z);
+                    if (this.raccoon.getWorld().getBlockState(checkPos).isIn(ModTags.Blocks.TRASH_CANS) || this.raccoon.getWorld().getBlockState(checkPos).isOf(Blocks.COMPOSTER)) {
                         if (closestPos == null ||
                                 this.raccoon.squaredDistanceTo(raccoonX - checkPos.getX(),
                                         raccoonY - checkPos.getY(),

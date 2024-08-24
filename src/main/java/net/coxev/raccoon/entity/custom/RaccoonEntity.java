@@ -1,5 +1,6 @@
 package net.coxev.raccoon.entity.custom;
 
+import net.coxev.raccoon.Raccoon;
 import net.coxev.raccoon.advancement.ModAdvancements;
 import net.coxev.raccoon.entity.ModEntities;
 import net.coxev.raccoon.entity.ai.RaccoonBegGoal;
@@ -35,7 +36,6 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.util.math.random.Random;
@@ -43,7 +43,6 @@ import net.minecraft.world.EntityView;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -55,17 +54,16 @@ public class RaccoonEntity extends TameableEntity implements Angerable {
     private static final TrackedData<Boolean> BEGGING = DataTracker.registerData(RaccoonEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Boolean> STEALING = DataTracker.registerData(RaccoonEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private static final TrackedData<Integer> BANDANA_COLOR = DataTracker.registerData(RaccoonEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Integer> TIMES_FEEDED = DataTracker.registerData(RaccoonEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
     private static final TrackedData<Integer> ANGER_TIME = DataTracker.registerData(RaccoonEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final UniformIntProvider ANGER_TIME_RANGE = TimeHelper.betweenSeconds(20, 39);
     @Nullable
     private UUID angryAt;
 
-    public boolean willGrowChonky = false;
-    public PlayerEntity playerThatChonkedIt;
-
     public int eatingTime;
     public int stealCooldown = 0;
+    public int feedingNeededToChonked = 100;
 
     public final AnimationState idleAnimationState = new AnimationState();
 
@@ -104,7 +102,9 @@ public class RaccoonEntity extends TameableEntity implements Angerable {
         if(this.hasCustomName() && this.getCustomName().getString().equalsIgnoreCase("pedro")){
             this.spinningAnimationState.startIfNotRunning(this.age);
         }
+
         this.idleAnimationState.startIfNotRunning(this.age);
+
         if(this.earsWiggleAnimationTimeout <= 0){
             this.earsWiggleAnimationTimeout = this.random.nextInt(80) + 160;
             this.earsWiggleAnimationState.start(this.age);
@@ -190,6 +190,14 @@ public class RaccoonEntity extends TameableEntity implements Angerable {
         this.dataTracker.set(STEALING, stealing);
     }
 
+    public int getTimesFeeded() {
+        return this.dataTracker.get(TIMES_FEEDED);
+    }
+
+    public void setTimesFeeded(int timesFeeded) {
+        this.dataTracker.set(TIMES_FEEDED, timesFeeded);
+    }
+
     @Override
     public void tick() {
         super.tick();
@@ -234,7 +242,7 @@ public class RaccoonEntity extends TameableEntity implements Angerable {
     }
 
     public DyeColor getBandanaColor() {
-        return DyeColor.byId((Integer)this.dataTracker.get(BANDANA_COLOR));
+        return DyeColor.byId(this.dataTracker.get(BANDANA_COLOR));
     }
 
     public void setBandanaColor(DyeColor color) {
@@ -250,6 +258,7 @@ public class RaccoonEntity extends TameableEntity implements Angerable {
         this.dataTracker.startTracking(STEALING, false);
         this.dataTracker.startTracking(BANDANA_COLOR, DyeColor.BLUE.getId());
         this.dataTracker.startTracking(ANGER_TIME, 0);
+        this.dataTracker.startTracking(TIMES_FEEDED, 0);
     }
 
     public void setChonky(boolean isChonky) {
@@ -262,10 +271,17 @@ public class RaccoonEntity extends TameableEntity implements Angerable {
         return this.dataTracker.get(IS_CHONKY);
     }
 
+    @Override
+    public boolean damage(DamageSource source, float amount) {
+        if(this.isSitting()) setSitting(false);
+        return super.damage(source, amount);
+    }
+
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putBoolean("Chonky", this.isChonky());
         nbt.putByte("BandanaColor", (byte)this.getBandanaColor().getId());
+        nbt.putInt("TimesFeeded", this.getTimesFeeded());
         this.writeAngerToNbt(nbt);
     }
 
@@ -275,6 +291,7 @@ public class RaccoonEntity extends TameableEntity implements Angerable {
         if (nbt.contains("BandanaColor", 99)) {
             this.setBandanaColor(DyeColor.byId(nbt.getInt("BandanaColor")));
         }
+        this.setTimesFeeded(nbt.getInt("TimesFeeded"));
         this.readAngerFromNbt(this.getWorld(), nbt);
     }
 
@@ -304,6 +321,7 @@ public class RaccoonEntity extends TameableEntity implements Angerable {
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         Random random = world.getRandom();
         this.setChonky(random.nextInt(20) < 1);
+        if(isChonky()) setTimesFeeded(this.feedingNeededToChonked);
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
@@ -317,19 +335,31 @@ public class RaccoonEntity extends TameableEntity implements Angerable {
             ItemStack itemStack = this.getEquippedStack(EquipmentSlot.MAINHAND);
             if (!this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty()) {
                 ++this.eatingTime;
-                if (this.eatingTime > 60 /*600*/) {
+                if (this.eatingTime > 300) {
                     ItemStack itemStack2 = itemStack.finishUsing(this.getWorld(), this);
+
                     if (!itemStack2.isEmpty()) {
                         this.equipStack(EquipmentSlot.MAINHAND, itemStack2);
                     }
-                    if(willGrowChonky) {
-                        if(this.playerThatChonkedIt instanceof ServerPlayerEntity){
-                            ModAdvancements.CHONKED.trigger((ServerPlayerEntity) this.playerThatChonkedIt);
+
+                    if (ofTagFoods(itemStack2) && this.getHealth() < this.getMaxHealth()) {
+                        this.heal((float)itemStack2.getItem().getFoodComponent().getHunger());
+                    }
+
+                    if(this.getTimesFeeded() < feedingNeededToChonked) this.setTimesFeeded(getTimesFeeded() + 1);
+                    if(this.getTimesFeeded() == this.feedingNeededToChonked){
+                        if(this.isTamed()){
+                            LivingEntity entity = getOwner();
+                            if(entity instanceof ServerPlayerEntity){
+                                ModAdvancements.CHONKED.trigger((ServerPlayerEntity) entity);
+
+                            }
                         }
                         this.setChonky(true);
                     }
                     this.eatingTime = 0;
-                } else if (this.eatingTime > 20 /*560*/ && this.random.nextFloat() < 0.1f) {
+                } else if (this.eatingTime > 260 && this.eatingTime % 4 == 0) {
+                    Raccoon.LOGGER.info(String.valueOf(eatingTime));
                     this.playSound(this.getEatSound(itemStack), 1.0f, 1.0f);
                     this.getWorld().sendEntityStatus(this, EntityStatuses.CREATE_EATING_PARTICLES);
                 }
@@ -348,18 +378,14 @@ public class RaccoonEntity extends TameableEntity implements Angerable {
         this.songPlaying = playing;
     }
 
-    public boolean isSongPlaying() {
-        return this.songPlaying;
-    }
-
     @Override
     public void handleStatus(byte status) {
         if (status == EntityStatuses.CREATE_EATING_PARTICLES) {
             ItemStack itemStack = this.getEquippedStack(EquipmentSlot.MAINHAND);
             if (!itemStack.isEmpty()) {
                 for (int i = 0; i < 8; ++i) {
-                    Vec3d vec3d = new Vec3d(((double)this.random.nextFloat() - 0.5) * 0.1, Math.random() * 0.1 + 0.1, 0.0).rotateX(-MathHelper.clamp(this.getPitch(), -20.0f, 20.0f)).rotateY(-MathHelper.clamp(headYaw, -20.0f, 20.0f));
-                    this.getWorld().addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack), this.getX() + this.getRotationVector().x / 2.0, this.getY(), this.getZ() + this.getRotationVector().z / 2.0 - 1, vec3d.x, vec3d.y + 0.05, vec3d.z);
+                    Vec3d vec3d = new Vec3d(((double)this.random.nextFloat() - 0.5) * 0.1, Math.random() * 0.1 + 0.1, 0.0).rotateX(-this.getPitch() * ((float)Math.PI / 180)).rotateY(-this.getYaw() * ((float)Math.PI / 180));
+                    this.getWorld().addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack), this.getX() + this.getRotationVector().x / 2.0, this.getY(), this.getZ() + this.getRotationVector().z / 2.0, vec3d.x, vec3d.y + 0.05, vec3d.z);
                 }
             }
         } else {
@@ -376,24 +402,18 @@ public class RaccoonEntity extends TameableEntity implements Angerable {
             if (this.isTamed() && this.isOwner(player)) {
                 return ActionResult.SUCCESS;
             } else {
-                return !this.isBreedingItem(itemStack) || !(this.getHealth() < this.getMaxHealth()) && this.isTamed() ? ActionResult.PASS : ActionResult.SUCCESS;
+                return !this.isBreedingItem(itemStack) || !(this.getHealth() < this.getMaxHealth()) && this.isTamed() || itemStack.isOf(ModItems.HAT_AND_GLASSES) ? ActionResult.PASS : ActionResult.SUCCESS;
             }
         } else {
             ActionResult actionResult;
             if(player.isSneaking() && this.getEquippedStack(EquipmentSlot.HEAD).isOf(ModItems.HAT_AND_GLASSES)){
                 this.getEquippedStack(EquipmentSlot.HEAD).decrement(1);
-                if(!player.isCreative()){
-                    player.giveItemStack(ModItems.HAT_AND_GLASSES.getDefaultStack());
-                }
+                this.dropStack(ModItems.HAT_AND_GLASSES.getDefaultStack());
                 return ActionResult.SUCCESS;
             } else {
                 if(this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty() && ofTagFoods(itemStack) && !this.isBreedingItem(itemStack)) {
                     this.eat(player, hand, itemStack);
                     this.setStackInHand(Hand.MAIN_HAND, item.getDefaultStack());
-                    if(Math.random() * 100 < 1){
-                        this.willGrowChonky = true;
-                        this.playerThatChonkedIt = player;
-                    }
                     return ActionResult.SUCCESS;
                 } else if (this.getEquippedStack(EquipmentSlot.HEAD).isEmpty() && item == ModItems.HAT_AND_GLASSES){
                     this.eat(player, hand, itemStack);
@@ -402,12 +422,6 @@ public class RaccoonEntity extends TameableEntity implements Angerable {
                 } else if(this.isTamed()){
                     if(this.isOwner(player)){
                         if (!(item instanceof DyeItem)) {
-                            if (item.isFood() && this.isBreedingItem(itemStack) && this.getHealth() < this.getMaxHealth()) {
-                                this.eat(player, hand, itemStack);
-                                this.heal((float)item.getFoodComponent().getHunger());
-                                return ActionResult.CONSUME;
-                            }
-
                             actionResult = super.interactMob(player, hand);
                             if (!actionResult.isAccepted() || this.isBaby()) {
                                 this.setSitting(!this.isSitting());
@@ -459,14 +473,6 @@ public class RaccoonEntity extends TameableEntity implements Angerable {
         }
         return bl;
     }
-
-    public void onEatItem() {
-        this.heal(10);
-        this.getWorld().sendEntityStatus(this, (byte) 92);
-        this.emitGameEvent(GameEvent.EAT);
-        this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getPitch());
-    }
-
 
     public static boolean ofTagFoods(ItemStack stack) {
         return stack.isIn(ConventionalItemTags.FOODS);

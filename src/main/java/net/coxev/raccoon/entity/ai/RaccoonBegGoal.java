@@ -1,6 +1,5 @@
 package net.coxev.raccoon.entity.ai;
 
-import com.supermartijn642.core.data.condition.ResourceCondition;
 import net.coxev.raccoon.entity.custom.RaccoonEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.TargetPredicate;
@@ -18,15 +17,9 @@ public class RaccoonBegGoal extends Goal {
     private final TargetPredicate predicate;
     protected final RaccoonEntity raccoon;
     private final double speed;
-    private double lastPlayerX;
-    private double lastPlayerY;
-    private double lastPlayerZ;
-    private double lastPlayerPitch;
-    private double lastPlayerYaw;
     @Nullable
     protected PlayerEntity closestPlayer;
     private int cooldown;
-    private boolean active;
     private final Ingredient food;
 
     public RaccoonBegGoal(PathAwareEntity raccoon, double speed, Ingredient food) {
@@ -44,7 +37,7 @@ public class RaccoonBegGoal extends Goal {
             return false;
         } else {
             this.closestPlayer = this.raccoon.getWorld().getClosestPlayer(this.predicate, this.raccoon);
-            return this.closestPlayer != null;
+            return this.closestPlayer != null && this.raccoon.getMainHandStack().isEmpty();
         }
     }
 
@@ -58,25 +51,16 @@ public class RaccoonBegGoal extends Goal {
     }
 
     @Override
-    public void start() {
-        this.lastPlayerX = this.closestPlayer.getX();
-        this.lastPlayerY = this.closestPlayer.getY();
-        this.lastPlayerZ = this.closestPlayer.getZ();
-        this.active = true;
-    }
-
-    @Override
     public void stop() {
         this.closestPlayer = null;
         this.raccoon.getNavigation().stop();
         this.cooldown = toGoalTicks(100);
         this.raccoon.setBegging(false);
-        this.active = false;
     }
 
     @Override
     public void tick() {
-        this.raccoon.getLookControl().lookAt(this.closestPlayer, (float)(this.raccoon.getMaxLookYawChange() + 20), (float)this.raccoon.getMaxLookPitchChange());
+        this.raccoon.getLookControl().lookAt(this.closestPlayer, (float)(this.raccoon.getMaxLookYawChange()), (float)this.raccoon.getMaxLookPitchChange());
         if (this.raccoon.distanceTo(this.closestPlayer) < 3D) {
             this.raccoon.getNavigation().stop();
             this.raccoon.setBegging(true);
@@ -84,9 +68,5 @@ public class RaccoonBegGoal extends Goal {
             this.raccoon.setBegging(false);
             this.raccoon.getNavigation().startMovingTo(this.closestPlayer, this.speed);
         }
-    }
-
-    public boolean isActive() {
-        return this.active;
     }
 }

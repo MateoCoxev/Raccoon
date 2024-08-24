@@ -1,6 +1,15 @@
 {
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:any_mod_loaded",
+      "values": [
+        "trashcans"
+      ]
+    }
+  ],
   "replace": false,
   "values": [
+    "minecraft:composter",
     "trashcans:item_trash_can",
     "trashcans:energy_trash_can",
     "trashcans:liquid_trash_can",

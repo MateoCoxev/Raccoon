@@ -3,7 +3,7 @@
 	"id": "raccoon",
 	"version": "${version}",
 	"name": "Raccoon",
-	"description": "Raccoon hehe",
+	"description": "Add tameable (and chonkable) raccoon in the game.",
 	"authors": [
 		"Coxev"
 	],

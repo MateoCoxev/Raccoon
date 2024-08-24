@@ -359,7 +359,6 @@ public class RaccoonEntity extends TameableEntity implements Angerable {
                     }
                     this.eatingTime = 0;
                 } else if (this.eatingTime > 260 && this.eatingTime % 4 == 0) {
-                    Raccoon.LOGGER.info(String.valueOf(eatingTime));
                     this.playSound(this.getEatSound(itemStack), 1.0f, 1.0f);
                     this.getWorld().sendEntityStatus(this, EntityStatuses.CREATE_EATING_PARTICLES);
                 }

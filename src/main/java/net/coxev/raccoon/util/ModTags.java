@@ -9,7 +9,7 @@ import net.minecraft.util.Identifier;
 
 public class ModTags {
     public static class Blocks {
-        public static final TagKey<Block> TRASH_CANS = TagKey.of(RegistryKeys.BLOCK, new Identifier ("c", "trash_cans"));
+        public static final TagKey<Block> STEALABLE = TagKey.of(RegistryKeys.BLOCK, new Identifier ("c", "stealable"));
     }
 
     public static class Items {

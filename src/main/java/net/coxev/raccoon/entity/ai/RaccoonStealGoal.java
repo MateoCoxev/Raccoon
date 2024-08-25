@@ -32,7 +32,7 @@ public class RaccoonStealGoal extends Goal {
             for (int y = raccoonY - distance; y < raccoonY + distance; y++) {
                 for (int z = raccoonZ - distance; z < raccoonZ + distance; z++) {
                     BlockPos checkPos = new BlockPos(x, y, z);
-                    if (this.raccoon.getWorld().getBlockState(checkPos).isIn(ModTags.Blocks.TRASH_CANS) || this.raccoon.getWorld().getBlockState(checkPos).isOf(Blocks.COMPOSTER)) {
+                    if (this.raccoon.getWorld().getBlockState(checkPos).isIn(ModTags.Blocks.STEALABLE) || this.raccoon.getWorld().getBlockState(checkPos).isOf(Blocks.COMPOSTER)) {
                         if (closestPos == null ||
                                 this.raccoon.squaredDistanceTo(raccoonX - checkPos.getX(),
                                         raccoonY - checkPos.getY(),

@@ -279,6 +279,7 @@ public class RaccoonEntity extends TameableEntity implements Angerable {
 
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
+        nbt.putBoolean("RaccoonSitting", this.isSitting());
         nbt.putBoolean("Chonky", this.isChonky());
         nbt.putByte("BandanaColor", (byte)this.getBandanaColor().getId());
         nbt.putInt("TimesFeeded", this.getTimesFeeded());
@@ -287,6 +288,7 @@ public class RaccoonEntity extends TameableEntity implements Angerable {
 
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
+        this.setSitting(nbt.getBoolean("RaccoonSitting"));
         this.setChonky(nbt.getBoolean("Chonky"));
         if (nbt.contains("BandanaColor", 99)) {
             this.setBandanaColor(DyeColor.byId(nbt.getInt("BandanaColor")));
